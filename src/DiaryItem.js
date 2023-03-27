@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 
-const DiaryItem = ({id, author, content, emtotion, created_data, onRemove, onEdit}) =>{
+const DiaryItem = ({id, author, content, emotion, created_data, onRemove, onEdit}) =>{
 
     const [isEdit, setIsEdit] = useState(false);
 
@@ -38,7 +38,7 @@ const handleEdit = () =>{
     return(
         <div>
             <div>
-                <span>작성자 : {author} ㅣ 감정점수 : {emtotion}</span>
+                <span>작성자 : {author} ㅣ 감정점수 : {emotion}</span>
                 <span>{new Date(created_data).toLocaleDateString()}</span>
                 <span>{content}</span>
                 {isEdit ? (

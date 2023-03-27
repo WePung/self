@@ -3,6 +3,7 @@ import { useRef, useState } from 'react';
 import './App.css';
 import DiaryEditor from './DiaryEditor';
 import DiaryList from './DiaryList';
+import LifeCycle from './LifeCycle';
 
 
 function App() {
@@ -31,7 +32,7 @@ function App() {
 
 const onEdit = (targetId, newContent) =>{
      setData(
-      ((it)=>it.id === targetId ? {...it, content: newContent} : it)
+      data.map((it)=>it.id === targetId ? {...it, content: newContent} : it)
      );
 }
 
@@ -63,6 +64,7 @@ const onEdit = (targetId, newContent) =>{
 
   return (
     <div className="App">
+      <LifeCycle />
       <DiaryEditor
       onCreate = {onCreate}
       />
