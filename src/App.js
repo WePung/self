@@ -1,5 +1,5 @@
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import './App.css';
 import DiaryEditor from './DiaryEditor';
 import DiaryList from './DiaryList';
@@ -23,7 +23,6 @@ function App() {
         id : dataId.current++
       }
     })
-
     setData(initData);
   };
 
@@ -53,43 +52,34 @@ function App() {
     setData(newDiaryList);
 }
 
-const onEdit = (targetId, newContent) =>{
-     setData(
-      data.map((it)=>it.id === targetId ? {...it, content: newContent} : it)
-     );
-}
+  const onEdit = (targetId, newContent) =>{
+      setData(
+        data.map((it)=>it.id === targetId ? {...it, content: newContent} : it)
+      );
+  }
 
+  const  getDiaryAnalysis = useMemo(
+    () => {
+    console.log("일기 분석 시작");
 
-  // const dummyList = [
-  //   {
-  //     id:1,
-  //     author:"이지원1",
-  //     content:"내용 1",
-  //     emotion:5,
-  //     created_data:new Date().getTime()
-  //   },
-  //   {
-  //     id:2,
-  //     author:"이지원2",
-  //     content:"내용 2",
-  //     emotion:5,
-  //     created_data:new Date().getTime()
-  //   },
-  //   {
-  //     id:3,
-  //     author:"이지원3",
-  //     content:"내용 3",
-  //     emotion:5,
-  //     created_data:new Date().getTime()
-  //   }
-  // ]
-  
+    const goodCount = data.filter((it)=>it.emotion >= 3).length;
+    const badCount = data.length - goodCount;
+    const goodRatio = (goodCount / data.length) * 100;
+    return {goodCount, badCount, goodRatio};
+  },[data.length]
+  );
+
+  const {goodCount, badCount, goodRatio} = getDiaryAnalysis;
 
   return (
     <div className="App">
       <DiaryEditor
       onCreate = {onCreate}
       />
+      <div>전체 일기:{data.length}</div>
+      <div>기분 좋은 일기:{goodCount}</div>
+      <div>기분 나쁜 일기:{badCount}</div>
+      <div>기분 좋은 일기 비율:{goodRatio}</div>
       <DiaryList
       diaryList = {data}
       onEdit={onEdit}
