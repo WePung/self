@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import './App.css';
 import DiaryEditor from './DiaryEditor';
 import DiaryList from './DiaryList';
+import OptimizeTest from './OptimizeTest';
 
 // https://jsonplaceholder.typicode.com/comments
 
@@ -73,6 +74,7 @@ function App() {
 
   return (
     <div className="App">
+      <OptimizeTest />
       <DiaryEditor
       onCreate = {onCreate}
       />
