@@ -1,11 +1,9 @@
 
-import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import './App.css';
 import DiaryEditor from './DiaryEditor';
 import DiaryList from './DiaryList';
 import OptimizeTest from './OptimizeTest';
-
-// https://jsonplaceholder.typicode.com/comments
 
 const reducer = (state, action) =>{
   switch(action.type){
@@ -32,7 +30,13 @@ const reducer = (state, action) =>{
 
 }
 
+export const DiaryStateContext = React.createContext();
+
+export const DiaryDispatchContext = React.createContext();
+
 function App() {
+
+  const [data, dispatch] = useReducer(reducer, []);
 
   const getData = async() => {
   const res = await fetch("https://jsonplaceholder.typicode.com/comments"
@@ -55,9 +59,6 @@ function App() {
     getData();
   },[])
 
-  // const [data, setData] = useState([]);
-  const [data, dispatch] = useReducer(reducer, []);
-
   const dataId = useRef(0);
 
   const onCreate = (author, content, emotion) =>{
@@ -74,6 +75,10 @@ function App() {
     dispatch({type:"EDIT", targetId, newContent})
   },[]);
 
+  const memoizedDispatch = useMemo(()=>{
+    return {onCreate, onRemove, onEdit}
+  }, []);
+
   const  getDiaryAnalysis = useMemo(
     () => {
     console.log("일기 분석 시작");
@@ -88,8 +93,9 @@ function App() {
   const {goodCount, badCount, goodRatio} = getDiaryAnalysis;
 
   return (
+    <DiaryStateContext.Provider value={data}>
+    <DiaryDispatchContext.Provider value={memoizedDispatch}>
     <div className="App">
-      <OptimizeTest />
       <DiaryEditor
       onCreate = {onCreate}
       />
@@ -98,11 +104,12 @@ function App() {
       <div>기분 나쁜 일기:{badCount}</div>
       <div>기분 좋은 일기 비율:{goodRatio}</div>
       <DiaryList
-      diaryList = {data}
       onEdit={onEdit}
       onRemove = {onRemove}
       />
     </div>
+    </DiaryDispatchContext.Provider>
+    </DiaryStateContext.Provider>
   );
 }
 

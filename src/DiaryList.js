@@ -1,7 +1,9 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import DiaryItem from "./DiaryItem";
+import {DiaryStateContext} from "./App";
 
-const DiaryList = ({onEdit, diaryList, onRemove}) => {
+const DiaryList = ({onEdit, onRemove}) => {
+    const diaryList = useContext(DiaryStateContext);
     return(
         <div>
             <h2>일기 리스트</h2>
