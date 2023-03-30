@@ -2,7 +2,6 @@ import React, {useState, useEffect} from "react";
 import DiaryItem from "./DiaryItem";
 
 const DiaryList = ({onEdit, diaryList, onRemove}) => {
-    console.log(diaryList);
     return(
         <div>
             <h2>일기 리스트</h2>
