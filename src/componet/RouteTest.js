@@ -18,9 +18,9 @@ const RouteTest = () => {
             <br />
         <select onChange={onChangeLink}>
             <option value="/">home</option>
-            <option value="new">new</option>
-            <option value="edit">edit</option>
-            <option value="diary">diary</option>
+            <option value="/new">new</option>
+            <option value="/edit">edit</option>
+            <option value="/diary">diary</option>
         </select>
       <Link to = {change}>
       <button>이동</button>
