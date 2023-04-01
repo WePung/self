@@ -2,14 +2,14 @@ import React,{useState} from 'react';
 
 const sortOptionList = [
     {
-        value:"lastest",
+        value:'lastest',
         name : "최신순", 
     },
     {
-        value:"oldest",
+        value:'oldest',
         name : "오래된 순", 
     }
-]
+];
 
 const ControlMenu = ({value, onChange, optionList}) =>{
     return(
@@ -17,11 +17,14 @@ const ControlMenu = ({value, onChange, optionList}) =>{
         value={value}
         onChange={(e)=> onChange(e.target.value)}
         >
-            {optionList.map((it, idx)=>
-            <option key={idx}>
+            {optionList.map((it, idx)=>(
+            <option
+            key={idx}
+            value={it.value}
+            >
                 {it.name}
             </option>
-            )
+            ))
             }
         </select>
     )
