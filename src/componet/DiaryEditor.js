@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MyHeader from './MyHeader';
 import MyButton from './MyButton';
@@ -38,20 +38,31 @@ const getStringDate = (date) =>{
     return date.toISOString().slice(0, 10); // toISOSring은 date객체를 받아 yyyy-mm-ddthh형태로 나타내줌
 }
 
-const DiaryEditor = () => {
+const DiaryEditor = ({isEdit, originData}) => {
 
     const [date, setDate] = useState(getStringDate(new Date()));
     const [emotion, setEmotion] = useState(3);
     const [content, setContnet] = useState("");
     const contentRef =useRef();
-    const {onCreate} = useContext(DiaryDispatchContext);
+    const {onCreate, onEdit} = useContext(DiaryDispatchContext);
+
+    const onInputTextArea = (e) => {
+        setContnet(e.target.value);
+    }
 
     const handleSubmit = () =>{
-        if(content === undefined){
+        if(content.length < 1){
             contentRef.current.focous();
             return;
         }
-        onCreate(date, content, emotion);
+        if(window.confirm(isEdit ? "일기를 수정하시겠습니까?" : "일기를 작성하시겠습니까?")){
+            if(!isEdit){
+                onCreate(date, content, emotion);
+                navigate('/',{replace:true});
+            }else{
+                onEdit(originData.id, date, content, emotion);
+            }
+        }
         navigate('/',{replace:true});
     }
 
@@ -64,6 +75,14 @@ const DiaryEditor = () => {
     const goBack = () => {
         navigate(-1);
     }
+    
+    useEffect(()=>{
+        if(isEdit){
+            setDate(getStringDate(new Date(parseInt(originData.date))));
+            setEmotion(originData.emotion);
+            setContnet(originData.content);
+        }
+    },[isEdit, originData])
 
     return (
         <div className='DiaryEditor'>
@@ -72,7 +91,7 @@ const DiaryEditor = () => {
                     onClick={goBack}
                     text={"< 뒤로가기"}
                     />}
-        headText = {"새로운 일기 쓰기"}
+        headText = {isEdit ? "일기 수정하기" : "새로운 일기 쓰기"}
         />
         <div>
             <section>
@@ -102,7 +121,7 @@ const DiaryEditor = () => {
                     <textarea
                      ref={contentRef}
                      value={content}
-                     onChange={(e)=>setContnet(e.target.value)}
+                     onChange={onInputTextArea}
                      placeholder='오늘은 어땠나요?'
                     />
                 </div>
