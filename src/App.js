@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useRef } from 'react';
+import React, { useState, useReducer, useRef, useEffect } from 'react';
 import "./App.css";
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
@@ -71,6 +71,17 @@ export const DiaryStateContext = React.createContext();
 export const DiaryDispatchContext = React.createContext();
 
 const App = () => {
+
+  useEffect(()=>{
+    // localStorage.setItem('key', 10); // 로컬스토리지에 key값은 key 이고 value는 10으로 setItem으로 저장해라
+    // localStorage.setItem('item3', JSON.stringify({value : 30})); // 로컬스토리지에 객체는 JSON.sringify를 사용해 직렬화 해야함
+  
+    const item1 = localStorage.getItem('item1'); // 저장은 number로 했지만 불러오면 문자열로 바뀜
+    const item2 = localStorage.getItem('item2');
+    const item3 = JSON.parse(localStorage.getItem('item3')); // 그래서 JSON.parse()를 이용해 꺼내야 함
+
+    console.log({item1, item2, item3})
+  },[])
 
   console.log(new Date().getTime());
 
