@@ -1,12 +1,11 @@
 import React, { useState, useReducer, useRef, useEffect } from 'react';
 import "./App.css";
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import Home from './pages/Home';
 import New from './pages/New';
 import Edit from './pages/Edit';
 import Diary from './pages/Diary';
-import MyHeader from './componet/MyHeader.js'
 
 const reducer = (state, action) =>{
   let newState = [];
@@ -29,65 +28,42 @@ const reducer = (state, action) =>{
     default:
       return state;
   }
+
+  localStorage.setItem('diary', JSON.stringify(newState));
   return newState;
 }
-
-const dummyData = [
-  {
-    id:1,
-    emotion:1,
-    content:"오늘의 1번",
-    date:1680340152168
-  },
-  {
-    id:2,
-    emotion:3,
-    content:"오늘의 2번",
-    date:1680340213916
-  },
-  {
-    id:3,
-    emotion:4,
-    content:"오늘의 3번",
-    date:1680340221311
-  },
-  {
-    id:4,
-    emotion:2,
-    content:"오늘의 4번",
-    date:1680340226234
-  },
-  {
-    id:5,
-    emotion:5,
-    content:"오늘의 5번",
-    date:1680340231891
-  }
-];
-
-
 
 export const DiaryStateContext = React.createContext();
 export const DiaryDispatchContext = React.createContext();
 
 const App = () => {
+  const [data, dispatch] = useReducer(reducer, []);
 
-  useEffect(()=>{
+  // useEffect(()=>{
     // localStorage.setItem('key', 10); // 로컬스토리지에 key값은 key 이고 value는 10으로 setItem으로 저장해라
     // localStorage.setItem('item3', JSON.stringify({value : 30})); // 로컬스토리지에 객체는 JSON.sringify를 사용해 직렬화 해야함
   
-    const item1 = localStorage.getItem('item1'); // 저장은 number로 했지만 불러오면 문자열로 바뀜
-    const item2 = localStorage.getItem('item2');
-    const item3 = JSON.parse(localStorage.getItem('item3')); // 그래서 JSON.parse()를 이용해 꺼내야 함
+    // const item1 = localStorage.getItem('item1'); // 저장은 number로 했지만 불러오면 문자열로 바뀜
+    // const item2 = localStorage.getItem('item2');
+    // const item3 = JSON.parse(localStorage.getItem('item3')); // 그래서 JSON.parse()를 이용해 꺼내야 함
 
-    console.log({item1, item2, item3})
-  },[])
+    // console.log({item1, item2, item3})
+  // },[])
+  useEffect(()=>{
+    const localData = localStorage.getItem('diary');
+    if(localData){
+      const diaryList = JSON.parse(localData).sort(
+        (a,b) => parseInt(b.id) - parseInt(a.id)
+      );
 
-  console.log(new Date().getTime());
+      dataId.current = parseInt(diaryList[0].id) + 1;
 
-  const [data, dispatch] = useReducer(reducer, dummyData);
+      dispatch({type:"INIT", data: diaryList});
+    }
+  }, [])
 
-  const dataId = useRef(6);
+
+  const dataId = useRef(0);
 
     // CREATE
     const onCreate = (date, content, emotion) =>{

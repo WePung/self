@@ -16,7 +16,7 @@ const DiaryEditor = ({isEdit, originData}) => {
     const [emotion, setEmotion] = useState(3);
     const [content, setContnet] = useState("");
     const contentRef =useRef();
-    const {onCreate, onEdit} = useContext(DiaryDispatchContext);
+    const {onCreate, onEdit, onRemove} = useContext(DiaryDispatchContext);
 
     const onInputTextArea = (e) => {
         setContnet(e.target.value);
@@ -36,6 +36,13 @@ const DiaryEditor = ({isEdit, originData}) => {
             }
         }
         navigate('/',{replace:true});
+    }
+
+    const handleRemove = () => {
+        if(window.confirm("정말 삭제하시겠습니까?")){
+            onRemove(originData.id);
+            navigate('/',{replace:true});
+        }
     }
 
     const handleClickEmote = (emotion) => {
@@ -64,6 +71,13 @@ const DiaryEditor = ({isEdit, originData}) => {
                     text={"< 뒤로가기"}
                     />}
         headText = {isEdit ? "일기 수정하기" : "새로운 일기 쓰기"}
+        rightChild={
+        isEdit && (
+        <MyButton
+        type={"negative"}
+        text={"삭제하기"}
+        onClick={handleRemove}
+        />)}
         />
         <div>
             <section>
