@@ -30,7 +30,7 @@ const filterOptionList = [
     }
 ]
 
-const ControlMenu = ({value, onChange, optionList}) =>{
+const ControlMenu = React.memo(({value, onChange, optionList}) =>{
     return(
         <select
         className='ControlMenu'
@@ -49,6 +49,7 @@ const ControlMenu = ({value, onChange, optionList}) =>{
         </select>
     )
 }
+);
 
 const DiaryList = ({diaryList}) => {
     const navigate = useNavigate();
