@@ -80,12 +80,14 @@ const App = () => {
 
     // CREATE
     const onCreate = (date, content, emotion) =>{
-      dispatch({type:"CREATE", data:{
+      dispatch({
+        type:"CREATE",
+        data:{
         id : dataId.current,
-        data: new Date(date).getTime(),
+        date: new Date(date).getTime(),
         content,
         emotion
-      }
+      },
     })
     dataId.current += 1;
     }
